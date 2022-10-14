@@ -1,6 +1,6 @@
 namespace DiscreteEventSimulation.Random;
 
-internal sealed class LinearCongruentialGenerator
+internal sealed class LinearCongruentialGenerator : IRandomNumberGenerator
 {
     private const long m = 4294967296;
     private const long a = 1664525;

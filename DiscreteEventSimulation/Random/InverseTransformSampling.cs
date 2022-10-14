@@ -2,7 +2,7 @@
 
 using static Math;
 
-internal class InverseTransformSampling
+internal class InverseTransformSampling : IRandomNumberGenerator
 {
     private const double lambda = 1.0;
 

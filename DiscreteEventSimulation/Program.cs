@@ -1,9 +1,6 @@
-﻿using DiscreteEventSimulation.Random;
+﻿using DiscreteEventSimulation;
+using DiscreteEventSimulation.Random;
 
-var linearCongruentialGenerator = new LinearCongruentialGenerator();
-var random = new InverseTransformSampling(linearCongruentialGenerator);
+var sim = new Simulation(x => x.ModelTime > 1000);
 
-for (int i = 0; i < 100; i++)
-{
-    Console.WriteLine(random.Next());
-}
+sim.Run();

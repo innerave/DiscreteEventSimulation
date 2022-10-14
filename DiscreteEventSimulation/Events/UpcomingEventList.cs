@@ -1,6 +1,6 @@
 namespace DiscreteEventSimulation.Events;
 
-internal sealed class UpcomingEventList
+internal sealed class UpcomingEventList : IUpcomingEventList
 {
     private readonly SortedDictionary<double, List<IEvent>> upcomingEvents = new();
 
