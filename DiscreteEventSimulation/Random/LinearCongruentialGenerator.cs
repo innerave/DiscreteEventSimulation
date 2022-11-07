@@ -2,19 +2,19 @@ namespace DiscreteEventSimulation.Random;
 
 internal sealed class LinearCongruentialGenerator : IRandomNumberGenerator
 {
-    private const long m = 4294967296;
-    private const long a = 1664525;
-    private const long c = 1013904223;
-    private long x;
+	private const long M = 4294967296;
+	private const long A = 1664525;
+	private const long C = 1013904223;
+	private long x;
 
-    public LinearCongruentialGenerator()
-    {
-        x = DateTime.Now.Ticks % m;
-    }
+	public LinearCongruentialGenerator()
+	{
+		x = DateTime.Now.Ticks % M;
+	}
 
-    public double Next()
-    {
-        x = ((a * x) + c) % m;
-        return (double)x / m;
-    }
+	public double Next()
+	{
+		x = (A * x + C) % M;
+		return (double)x / M;
+	}
 }

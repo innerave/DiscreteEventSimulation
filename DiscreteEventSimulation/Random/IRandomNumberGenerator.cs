@@ -2,5 +2,5 @@
 
 internal interface IRandomNumberGenerator
 {
-    double Next();
+	double Next();
 }

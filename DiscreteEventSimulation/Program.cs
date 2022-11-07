@@ -1,6 +1,7 @@
 ﻿using DiscreteEventSimulation;
-using DiscreteEventSimulation.Random;
+using DiscreteEventSimulation.Events.EventTypes;
 
-var sim = new Simulation(x => x.ModelTime > 1000);
+var simulation = new Simulation(x => x.ModelTimeManager.ModelTime > 1000);
 
-sim.Run();
+simulation.Add(new TypeAEvent(0.1));
+simulation.Run();

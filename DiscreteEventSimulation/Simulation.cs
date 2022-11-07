@@ -1,39 +1,41 @@
 namespace DiscreteEventSimulation;
 
-using System.Linq.Expressions;
 using DiscreteEventSimulation.Events;
+using DiscreteEventSimulation.Random;
+
 internal sealed class Simulation
 {
-    public double ModelTime { get; private set; }
+	public ModelTimeManager ModelTimeManager { get; } = new();
+	public EventStatistics EventStatistics { get; } = new();
+	public UpcomingEventList UpcomingEventList { get; } = new();
+	
+	private Resource resource = new();
 
-    public int HandledEventsCount { get; private set; }
+	private readonly IRandomNumberGenerator randomNumberGenerator = new InverseTransformSampling(new LinearCongruentialGenerator());
 
-    public int RejectedEventsCount { get; private set; }
+	private readonly Func<Simulation, bool> stopCondition;
 
-    private readonly IUpcomingEventList upcomingEventList = new UpcomingEventList();
-    private readonly Func<Simulation, bool> stopCondition;
+	public Simulation(Func<Simulation, bool> stopCondition)
+	{
+		this.stopCondition = stopCondition;
+	}
 
-    public Simulation(Func<Simulation, bool> stopCondition)
-    {
-        this.stopCondition = stopCondition;
-    }
+	public void Run()
+	{
+		while (!stopCondition(this))
+		{
+			if (!UpcomingEventList.TryGetCriticalEvent(out var @event))
+			{
+				break;
+			}
 
-    public void Run()
-    {
-        while (!stopCondition(this))
-        {
-            if (!upcomingEventList.TryGetCriticalEvent(out var @event))
-            {
-                break;
-            }
+			ModelTimeManager.ModelTime = @event.ModelTime;
+			@event.Handle(UpcomingEventList, randomNumberGenerator, ModelTimeManager, EventStatistics, resource);
+		}
+	}
 
-            ModelTime = @event.ModelTime;
-            @event.Handle();
-        }
-    }
-
-    public void Add(IEvent @event)
-    {
-        upcomingEventList.Add(@event);
-    }
+	public void Add(IEvent @event)
+	{
+		UpcomingEventList.Add(@event);
+	}
 }
