@@ -1,7 +1,7 @@
 namespace DiscreteEventSimulation;
 
-using DiscreteEventSimulation.Events;
-using DiscreteEventSimulation.Random;
+using Events;
+using Random;
 
 internal sealed class Simulation
 {
@@ -9,7 +9,7 @@ internal sealed class Simulation
 	public EventStatistics EventStatistics { get; } = new();
 	public UpcomingEventList UpcomingEventList { get; } = new();
 	
-	private Resource resource = new();
+	private readonly Resource resource = new();
 
 	private readonly IRandomNumberGenerator randomNumberGenerator = new InverseTransformSampling(new LinearCongruentialGenerator());
 

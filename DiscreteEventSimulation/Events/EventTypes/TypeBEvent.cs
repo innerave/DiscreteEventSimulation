@@ -17,7 +17,7 @@ internal class TypeBEvent : IEvent
 		eventStatistics.CurrentEventsCount -= 1;
 		eventStatistics.HandledEventsCount += 1;
 
-		if (eventStatistics.CurrentEventsCount <= 1)
+		if (eventStatistics.CurrentEventsCount > 1)
 		{
 			upcomingEventList.Add(new TypeBEvent(modelTimeManager.ModelTime + randomNumberGenerator.Next()));
 		}
