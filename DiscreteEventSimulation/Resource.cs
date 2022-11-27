@@ -2,17 +2,19 @@
 
 public class Resource
 {
-	private int maxCapacity = 1;
+	public int MaxCapacity { get; set; } = 1;
+
+	public int CurrentCapacity { get; set; } = 0;
 
 	public bool TryGetResource()
 	{
-		if (maxCapacity <= 0) return false;
-		maxCapacity--;
+		if (CurrentCapacity >= MaxCapacity) return false;
+		CurrentCapacity++;
 		return true;
 	}
 	
 	public void ReleaseResource()
 	{
-		maxCapacity++;
+		CurrentCapacity--;
 	}
 }

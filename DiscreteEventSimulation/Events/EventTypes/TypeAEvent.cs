@@ -24,7 +24,7 @@ internal class TypeAEvent : IEvent
 		{
 			if (eventStatistics.CurrentEventsCount <= 1)
 			{
-				// Постановка в очередь
+				
 			}
 			else
 			{
