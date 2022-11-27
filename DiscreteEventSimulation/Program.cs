@@ -18,6 +18,10 @@ Parallel.ForEach(simulations,simulation => simulation.Run());
 
 var results = simulations.Select(x => x.EventStatistics).ToList();
 
+var averageCurrentEventsCount = results.Average(x => x.CurrentEventsCount);
+var averageHandledEventsCount = results.Average(x => x.HandledEventsCount);
+var averageRejectedEventsCount = results.Average(x => x.RejectedEventsCount);
+
 var calculatedResults = new Dictionary<double, int[,]>();
 
 foreach (var eventByTime in 
@@ -63,6 +67,10 @@ if (File.Exists("results.csv"))
 }
 
 using var writer = new StreamWriter("results.csv");
+writer.WriteLine($"{nameof(averageCurrentEventsCount)},{averageCurrentEventsCount}");
+writer.WriteLine($"{nameof(averageHandledEventsCount)},{averageHandledEventsCount}");
+writer.WriteLine($"{nameof(averageRejectedEventsCount)},{averageRejectedEventsCount}");
+writer.WriteLine();
 writer.WriteLine("Time,P(0:0),P(0:1),P(1:0),P(1:1)");
 foreach (var result in averageResults)
 {

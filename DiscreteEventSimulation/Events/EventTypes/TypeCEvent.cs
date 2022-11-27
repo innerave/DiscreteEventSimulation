@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using DiscreteEventSimulation.Random;
+﻿using DiscreteEventSimulation.Random;
 
 namespace DiscreteEventSimulation.Events.EventTypes;
 

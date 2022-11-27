@@ -2,7 +2,6 @@
 
 internal class EventStatistics
 {
-	// Заявки и в очереди и в обслуживании
 	public int CurrentEventsCount { get; set; }
 
 	public int HandledEventsCount { get; set; }
