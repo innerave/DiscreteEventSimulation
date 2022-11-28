@@ -22,7 +22,7 @@ internal class TypeAEvent : IEvent
 		}
 		else
 		{
-			if (eventStatistics.CurrentEventsCount <= 1)
+			if (eventStatistics.CurrentEventsCount <= 2)
 			{
 				
 			}

@@ -14,9 +14,9 @@ internal class TypeCEvent : IEvent
 	public void Handle(UpcomingEventList upcomingEventList, IRandomNumberGenerator randomNumberGenerator,
 		ModelTimeManager modelTimeManager, EventStatistics eventStatistics, Resource resource)
 	{
-		var list = new int[resource.MaxCapacity + 1,2];
+		var list = new int[3];
 		
-		list[resource.CurrentCapacity, eventStatistics.CurrentEventsCount] = 1;
+		list[eventStatistics.CurrentEventsCount] = 1;
 
 		eventStatistics.EventsCountByTime.Add(ModelTime, list);
 		

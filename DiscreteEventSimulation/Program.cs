@@ -22,7 +22,7 @@ var averageCurrentEventsCount = results.Average(x => x.CurrentEventsCount);
 var averageHandledEventsCount = results.Average(x => x.HandledEventsCount);
 var averageRejectedEventsCount = results.Average(x => x.RejectedEventsCount);
 
-var calculatedResults = new Dictionary<double, int[,]>();
+var calculatedResults = new Dictionary<double, int[]>();
 
 foreach (var eventByTime in 
          results
@@ -31,10 +31,10 @@ foreach (var eventByTime in
 {
 	if (calculatedResults.ContainsKey(eventByTime.Key))
 	{
-		calculatedResults[eventByTime.Key][0, 0] += eventByTime.Value[0, 0];
-		calculatedResults[eventByTime.Key][0, 1] += eventByTime.Value[0, 1];
-		calculatedResults[eventByTime.Key][1, 0] += eventByTime.Value[1, 0];
-		calculatedResults[eventByTime.Key][1, 1] += eventByTime.Value[1, 1];
+		for (var i = 0; i < 3; i++)
+		{
+			calculatedResults[eventByTime.Key][i] += eventByTime.Value[i];
+		}
 	}
 	else
 	{
@@ -46,16 +46,11 @@ var averageResults = calculatedResults
 	.Select(x => new
 	{
 		Time = x.Key,
-		Values = new double[,]
+		Values = new[]
 		{
-			{
-				(double)x.Value[0, 0] / numberOfExperiments,
-				(double)x.Value[0, 1] / numberOfExperiments
-			},
-			{
-				(double)x.Value[1, 0] / numberOfExperiments,
-				(double)x.Value[1, 1] / numberOfExperiments
-			}
+			(double)x.Value[0] / numberOfExperiments,
+			(double)x.Value[1] / numberOfExperiments,
+			(double)x.Value[2] / numberOfExperiments
 		}
 	})
 	.OrderBy(x => x.Time)
@@ -71,9 +66,9 @@ writer.WriteLine($"{nameof(averageCurrentEventsCount)},{averageCurrentEventsCoun
 writer.WriteLine($"{nameof(averageHandledEventsCount)},{averageHandledEventsCount}");
 writer.WriteLine($"{nameof(averageRejectedEventsCount)},{averageRejectedEventsCount}");
 writer.WriteLine();
-writer.WriteLine("Time,P(0:0),P(0:1),P(1:0),P(1:1)");
+writer.WriteLine("Time,P(0),P(1),P(2)");
 foreach (var result in averageResults)
 {
-	writer.WriteLine($"{result.Time},{result.Values[0, 0]},{result.Values[0, 1]},{result.Values[1, 0]},{result.Values[1, 1]}");
+	writer.WriteLine($"{result.Time},{result.Values[0]},{result.Values[1]},{result.Values[2]}");
 }
 
