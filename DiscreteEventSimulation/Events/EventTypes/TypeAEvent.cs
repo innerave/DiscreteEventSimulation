@@ -11,18 +11,17 @@ internal class TypeAEvent : IEvent
 
 	public double ModelTime { get; }
 
-	public void Handle(UpcomingEventList upcomingEventList, IRandomNumberGenerator randomNumberGenerator,
-		ModelTimeManager modelTimeManager, EventStatistics eventStatistics, Resource resource)
+	public void Handle(EventPlanner eventPlanner,EventStatistics eventStatistics, Resource resource)
 	{
 		eventStatistics.CurrentEventsCount += 1;
 
 		if (resource.TryGetResource())
 		{
-			upcomingEventList.Add(new TypeBEvent(ModelTime + randomNumberGenerator.Next()));
+			eventPlanner.PlanTypeBEvent();
 		}
 		else
 		{
-			if (eventStatistics.CurrentEventsCount <= 2)
+			if (eventStatistics.CurrentEventsCount <= SimulationSettings.QueueCapacity + SimulationSettings.ResourceCount)
 			{
 				
 			}
@@ -33,6 +32,6 @@ internal class TypeAEvent : IEvent
 			}
 		}
 		
-		upcomingEventList.Add(new TypeAEvent(ModelTime + randomNumberGenerator.Next()));
+		eventPlanner.PlanTypeAEvent();
 	}
 }

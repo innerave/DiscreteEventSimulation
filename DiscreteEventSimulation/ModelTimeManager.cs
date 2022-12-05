@@ -2,24 +2,23 @@
 
 internal class ModelTimeManager
 {
-	private double modelTime;
+	private double modelTime = -1;
 
 	public double ModelTime
 	{
 		get => modelTime;
 		set
 		{
-			if (value < 0 || value <= modelTime)
+			if (value < modelTime)
 				throw new ArgumentOutOfRangeException(
 					nameof(value), 
-					"Model time must be greater than 0 and greater " +
-					$"than the current model time ({modelTime}).");
+					$"Model time must be greater than the current model time ({modelTime}).");
 			modelTime = value;
 		}
 	}
 
 	public void ResetModelTime()
 	{
-		modelTime = 0;
+		modelTime = -1;
 	}
 }

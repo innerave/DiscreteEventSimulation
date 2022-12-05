@@ -1,15 +1,14 @@
-﻿using DiscreteEventSimulation;
+﻿using System.Text;
+using DiscreteEventSimulation;
 using DiscreteEventSimulation.Events.EventTypes;
 
-const int numberOfExperiments = 1000;
-
 var simulations = Enumerable
-	.Range(0, numberOfExperiments)
+	.Range(0, SimulationSettings.SimulationRuns)
 	.Select(_ =>
 	{
-		var simulation = new Simulation(x => x.ModelTimeManager.ModelTime >= 1000);
-		simulation.Add(new TypeAEvent(0.1));
-		simulation.Add(new TypeCEvent(1));
+		var simulation = new Simulation(x => x.ModelTimeManager.ModelTime >= SimulationSettings.SimulationTime);
+		simulation.Add(new TypeCEvent(0));
+		simulation.Add(new TypeAEvent(simulation.RandomNumberGenerator.Next(SimulationSettings.RequestIntensity)));
 		return simulation;
 	})
 	.ToList();
@@ -18,11 +17,7 @@ Parallel.ForEach(simulations,simulation => simulation.Run());
 
 var results = simulations.Select(x => x.EventStatistics).ToList();
 
-var averageCurrentEventsCount = results.Average(x => x.CurrentEventsCount);
-var averageHandledEventsCount = results.Average(x => x.HandledEventsCount);
-var averageRejectedEventsCount = results.Average(x => x.RejectedEventsCount);
-
-var calculatedResults = new Dictionary<double, int[]>();
+var calculatedResults = new Dictionary<double, double[]>();
 
 foreach (var eventByTime in 
          results
@@ -31,7 +26,7 @@ foreach (var eventByTime in
 {
 	if (calculatedResults.ContainsKey(eventByTime.Key))
 	{
-		for (var i = 0; i < 3; i++)
+		for (var i = 0; i < SimulationSettings.QueueCapacity + SimulationSettings.ResourceCount + 1; i++)
 		{
 			calculatedResults[eventByTime.Key][i] += eventByTime.Value[i];
 		}
@@ -46,29 +41,29 @@ var averageResults = calculatedResults
 	.Select(x => new
 	{
 		Time = x.Key,
-		Values = new[]
-		{
-			(double)x.Value[0] / numberOfExperiments,
-			(double)x.Value[1] / numberOfExperiments,
-			(double)x.Value[2] / numberOfExperiments
-		}
-	})
-	.OrderBy(x => x.Time)
-	.ToList();
+		Values = x.Value.Select(y => y / SimulationSettings.SimulationRuns).ToArray()
+	}).OrderBy(x => x.Time).ToList();
+
 
 if (File.Exists("results.csv"))
 {
 	File.Delete("results.csv");
 }
-
 using var writer = new StreamWriter("results.csv");
-writer.WriteLine($"{nameof(averageCurrentEventsCount)},{averageCurrentEventsCount}");
-writer.WriteLine($"{nameof(averageHandledEventsCount)},{averageHandledEventsCount}");
-writer.WriteLine($"{nameof(averageRejectedEventsCount)},{averageRejectedEventsCount}");
-writer.WriteLine();
-writer.WriteLine("Time,P(0),P(1),P(2)");
+var headerBuilder = new StringBuilder();
+headerBuilder.Append("Time");
+for (var i = 0; i < SimulationSettings.QueueCapacity + SimulationSettings.ResourceCount + 1; i++)
+{
+	headerBuilder.Append($",P{i}");
+}
+writer.WriteLine(headerBuilder.ToString());
 foreach (var result in averageResults)
 {
-	writer.WriteLine($"{result.Time},{result.Values[0]},{result.Values[1]},{result.Values[2]}");
+	var builder = new StringBuilder();
+	builder.Append(result.Time);
+	for (var i = 0; i < SimulationSettings.QueueCapacity + SimulationSettings.ResourceCount + 1; i++)
+	{
+		builder.Append($",{result.Values[i]}");
+	}
+	writer.WriteLine(builder.ToString());
 }
-

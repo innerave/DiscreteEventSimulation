@@ -11,15 +11,14 @@ internal class TypeBEvent : IEvent
 
 	public double ModelTime { get; }
 	
-	public void Handle(UpcomingEventList upcomingEventList, IRandomNumberGenerator randomNumberGenerator,
-		ModelTimeManager modelTimeManager, EventStatistics eventStatistics, Resource resource)
+	public void Handle(EventPlanner eventPlanner, EventStatistics eventStatistics, Resource resource)
 	{
 		eventStatistics.CurrentEventsCount -= 1;
 		eventStatistics.HandledEventsCount += 1;
 
 		if (eventStatistics.CurrentEventsCount > 1)
 		{
-			upcomingEventList.Add(new TypeBEvent(modelTimeManager.ModelTime + randomNumberGenerator.Next()));
+			eventPlanner.PlanTypeBEvent();
 		}
 		else
 		{

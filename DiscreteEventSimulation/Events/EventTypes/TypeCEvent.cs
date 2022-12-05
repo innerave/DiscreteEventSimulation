@@ -1,6 +1,4 @@
-﻿using DiscreteEventSimulation.Random;
-
-namespace DiscreteEventSimulation.Events.EventTypes;
+﻿namespace DiscreteEventSimulation.Events.EventTypes;
 
 internal class TypeCEvent : IEvent
 {
@@ -11,15 +9,11 @@ internal class TypeCEvent : IEvent
 	
 	public double ModelTime { get; }
 	
-	public void Handle(UpcomingEventList upcomingEventList, IRandomNumberGenerator randomNumberGenerator,
-		ModelTimeManager modelTimeManager, EventStatistics eventStatistics, Resource resource)
+	public void Handle(EventPlanner eventPlanner, EventStatistics eventStatistics, Resource resource)
 	{
-		var list = new int[3];
-		
+		var list = new double[SimulationSettings.QueueCapacity + SimulationSettings.ResourceCount + 1];
 		list[eventStatistics.CurrentEventsCount] = 1;
-
 		eventStatistics.EventsCountByTime.Add(ModelTime, list);
-		
-		upcomingEventList.Add(new TypeCEvent(ModelTime + 1));
+		eventPlanner.PlanTypeCEvent();
 	}
 }

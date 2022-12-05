@@ -2,7 +2,7 @@
 
 public class Resource
 {
-	public int MaxCapacity { get; set; } = 1;
+	public int MaxCapacity { get; set; } = SimulationSettings.ResourceCount;
 
 	public int CurrentCapacity { get; set; } = 0;
 

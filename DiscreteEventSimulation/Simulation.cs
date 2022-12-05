@@ -11,13 +11,16 @@ internal sealed class Simulation
 	
 	private readonly Resource resource = new();
 
-	private readonly IRandomNumberGenerator randomNumberGenerator = new InverseTransformSampling(new LinearCongruentialGenerator());
+	public IRandomNumberGenerator RandomNumberGenerator { get; } = new InverseTransformSampling(new LinearCongruentialGenerator());
 
 	private readonly Func<Simulation, bool> stopCondition;
+	
+	private readonly EventPlanner eventPlanner;
 
 	public Simulation(Func<Simulation, bool> stopCondition)
 	{
 		this.stopCondition = stopCondition;
+		eventPlanner = new EventPlanner(ModelTimeManager, EventStatistics, UpcomingEventList, RandomNumberGenerator);
 	}
 
 	public void Run()
@@ -30,7 +33,7 @@ internal sealed class Simulation
 			}
 
 			ModelTimeManager.ModelTime = @event.ModelTime;
-			@event.Handle(UpcomingEventList, randomNumberGenerator, ModelTimeManager, EventStatistics, resource);
+			@event.Handle(eventPlanner, EventStatistics, resource);
 		}
 	}
 

@@ -4,8 +4,6 @@ using static Math;
 
 internal class InverseTransformSampling : IRandomNumberGenerator
 {
-	private const double Lambda = 1.0;
-
 	private readonly LinearCongruentialGenerator linearCongruentialGenerator;
 
 	public InverseTransformSampling(LinearCongruentialGenerator linearCongruentialGenerator)
@@ -13,5 +11,5 @@ internal class InverseTransformSampling : IRandomNumberGenerator
 		this.linearCongruentialGenerator = linearCongruentialGenerator;
 	}
 
-	public double Next() => Log(1 - linearCongruentialGenerator.Next()) / -Lambda;
+	public double Next(double lambda) => Log(1 - linearCongruentialGenerator.Next()) / -lambda;
 }

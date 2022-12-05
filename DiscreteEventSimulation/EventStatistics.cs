@@ -8,5 +8,5 @@ internal class EventStatistics
 
 	public int RejectedEventsCount { get; set; }
 	
-	public Dictionary<double, int[]> EventsCountByTime { get; set; } = new();
+	public Dictionary<double, double[]> EventsCountByTime { get; set; } = new();
 }
