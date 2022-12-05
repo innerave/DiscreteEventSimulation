@@ -9,18 +9,22 @@ internal sealed class Simulation
 	public EventStatistics EventStatistics { get; } = new();
 	public UpcomingEventList UpcomingEventList { get; } = new();
 	
-	private readonly Resource resource = new();
+	private readonly Resource resource;
 
 	public IRandomNumberGenerator RandomNumberGenerator { get; } = new InverseTransformSampling(new LinearCongruentialGenerator());
 
+	private readonly SimulationSettings simulationSettings;
+	
 	private readonly Func<Simulation, bool> stopCondition;
 	
 	private readonly EventPlanner eventPlanner;
 
-	public Simulation(Func<Simulation, bool> stopCondition)
+	public Simulation(SimulationSettings simulationSettings, Func<Simulation, bool> stopCondition)
 	{
+		this.simulationSettings = simulationSettings;
 		this.stopCondition = stopCondition;
-		eventPlanner = new EventPlanner(ModelTimeManager, EventStatistics, UpcomingEventList, RandomNumberGenerator);
+		resource = new Resource(simulationSettings.ResourceCount);
+		eventPlanner = new EventPlanner(ModelTimeManager, EventStatistics, UpcomingEventList, RandomNumberGenerator, simulationSettings);
 	}
 
 	public void Run()
@@ -33,7 +37,7 @@ internal sealed class Simulation
 			}
 
 			ModelTimeManager.ModelTime = @event.ModelTime;
-			@event.Handle(eventPlanner, EventStatistics, resource);
+			@event.Handle(eventPlanner, EventStatistics, resource, simulationSettings);
 		}
 	}
 

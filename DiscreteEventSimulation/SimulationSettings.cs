@@ -1,39 +1,50 @@
 ﻿namespace DiscreteEventSimulation;
 
-public static class SimulationSettings
+public class SimulationSettings
 {
+	public SimulationSettings(double requestIntensity, int resourceCount, double serviceIntensity, int queueCapacity, double simulationTime, int simulationRuns, double statisticsInterval)
+	{
+		RequestIntensity = requestIntensity;
+		ResourceCount = resourceCount;
+		ServiceIntensity = serviceIntensity;
+		QueueCapacity = queueCapacity;
+		SimulationTime = simulationTime;
+		SimulationRuns = simulationRuns;
+		StatisticsInterval = statisticsInterval;
+	}
+
 	/// <summary>
 	/// Интенсивность входного потока
 	/// </summary>
-	public static double RequestIntensity { get; set; } = 3.0;
+	public double RequestIntensity { get; }
 	
 	/// <summary>
 	/// Число каналов обслуживания
 	/// </summary>
-	public static int ResourceCount { get; set; } = 2;
+	public int ResourceCount { get; }
 
 	/// <summary>
 	/// Интенсивность обслуживания заявок
 	/// </summary>
-	public static double ServiceIntensity { get; set; } = 1.0;
+	public double ServiceIntensity { get; }
 
 	/// <summary>
 	/// Число мест в очереди
 	/// </summary>
-	public static int QueueCapacity { get; set; } = 4;
+	public int QueueCapacity { get; }
 
 	/// <summary>
 	/// Продолжительность моделирования
 	/// </summary>
-	public static double SimulationTime { get; set; } = 4.2;
+	public double SimulationTime { get; }
 
 	/// <summary>
 	/// Число прогонов
 	/// </summary>
-	public static int SimulationRuns { get; set; } = 5000;
+	public int SimulationRuns { get; }
 	
 	/// <summary>
 	/// Интервал сбора статистики
 	/// </summary>
-	public static double StatisticsInterval { get; set; } = 0.005;
+	public double StatisticsInterval { get; }
 }

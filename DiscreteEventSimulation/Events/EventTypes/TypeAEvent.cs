@@ -11,7 +11,8 @@ internal class TypeAEvent : IEvent
 
 	public double ModelTime { get; }
 
-	public void Handle(EventPlanner eventPlanner,EventStatistics eventStatistics, Resource resource)
+	public void Handle(EventPlanner eventPlanner, EventStatistics eventStatistics, Resource resource,
+		SimulationSettings simulationSettings)
 	{
 		eventStatistics.CurrentEventsCount += 1;
 
@@ -21,7 +22,7 @@ internal class TypeAEvent : IEvent
 		}
 		else
 		{
-			if (eventStatistics.CurrentEventsCount <= SimulationSettings.QueueCapacity + SimulationSettings.ResourceCount)
+			if (eventStatistics.CurrentEventsCount <= simulationSettings.QueueCapacity + simulationSettings.ResourceCount)
 			{
 				
 			}

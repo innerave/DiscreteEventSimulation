@@ -11,7 +11,8 @@ internal class TypeBEvent : IEvent
 
 	public double ModelTime { get; }
 	
-	public void Handle(EventPlanner eventPlanner, EventStatistics eventStatistics, Resource resource)
+	public void Handle(EventPlanner eventPlanner, EventStatistics eventStatistics, Resource resource,
+		SimulationSettings simulationSettings)
 	{
 		eventStatistics.CurrentEventsCount -= 1;
 		eventStatistics.HandledEventsCount += 1;
